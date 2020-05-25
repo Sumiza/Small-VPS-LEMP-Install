@@ -49,5 +49,26 @@ chown -R nginx:nginx /usr/share/nginx/html/$DOMAINNAMEFQDN
 wget --no-check-certificate https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/BlankNginx.conf -O /etc/nginx/conf.d/$DOMAINNAMEFQDN.conf
 sed -i 's|WEBSITENAME|$DOMAINNAMEFQDN|' /etc/nginx/conf.d/$DOMAINNAMEFQDN.conf
 sed -i 's|WEBSITENAME|$DOMAINNAMEFQDN|' /etc/nginx/conf.d/$DOMAINNAMEFQDN.conf
+echo "Want to set up letsencrypt now? (y/n) only say yes if you have your dns set up already or it will fail" 
+read RSP
+if [ "$REP" = "y" ]; then
+	certbot --nginx --register-unsafely-without-email
+fi
+/usr/bin/mysql_secure_installation
+echo "Want to set up a MYSQL Database now? (y/n)" 
+read RSP
+if [ "$REP" = "y" ]; then
+echo "Logging into mysql"
+echo "MYSQL Password: " 
+read rootpasswd
+echo "Database name you would like to create, something like (domainname) no special charecters"
+read DBNAME
+echo "Name of user for this database"
+read DBUSER
+echo "Password for user $DBNAME"
+read DBPASS
+mysql -uroot -p$rootpasswd -e "create database $DBNAME;"
+mysql -uroot -p$rootpasswd -e "grant all on $DBNAME.* to '$DBUSER' identified by '$DBPASS';"
+fi
 rm install.sh
-echo "DONE DONE DONE DONE well not really but things are installed"
+echo "DONE DONE DONE DONE"
