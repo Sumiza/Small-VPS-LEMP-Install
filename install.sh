@@ -76,7 +76,7 @@ rm install.sh
 echo "DONE DONE DONE DONE make sure to note down this information:
 MYSQL Database : $DBNAME
 MYSQL User : $DBUSER
-MYSQL Password: $rootpasswd
+MYSQL Password: $DBPASS
 -----------------------------------
 Hit enter to reboot"
 read -r RSP
