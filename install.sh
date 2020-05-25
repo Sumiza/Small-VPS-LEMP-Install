@@ -29,11 +29,11 @@ systemctl enable mariadb
 systemctl enable nginx
 rm /etc/nginx/nginx.conf
 wget --no-check-certificate https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/nginx.conf -O /etc/nginx/nginx.conf
-sed -i '/;listen = 127.0.0.1:9000/c\listen = /var/run/php-fpm/php-fpm.sock' /etc/php-fpm.d/www.conf
+sed -i '/listen = 127.0.0.1:9000/c\listen = /var/run/php-fpm/php-fpm.sock' /etc/php-fpm.d/www.conf
 sed -i '/listen.owner = /c\listen.owner = nginx' /etc/php-fpm.d/www.conf
 sed -i '/listen.group = /c\listen.group = nginx' /etc/php-fpm.d/www.conf
-sed -i '/user = /c\user = nginx' /etc/php-fpm.d/www.conf
-sed -i '/group = /c\group = nginx' /etc/php-fpm.d/www.conf
+sed -i '/user = apache/c\user = nginx' /etc/php-fpm.d/www.conf
+sed -i '/group = apache/c\group = nginx' /etc/php-fpm.d/www.conf
 sed -i '/pm = /c\pm = ondemand' /etc/php-fpm.d/www.conf
 sed -i '/pm.max_children = /c\pm.max_children = 1' /etc/php-fpm.d/www.conf
 sed -i '/pm.start_servers = /c\;pm.start_servers = 2' /etc/php-fpm.d/www.conf
