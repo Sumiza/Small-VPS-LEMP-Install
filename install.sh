@@ -36,9 +36,6 @@ sed -i '/user = apache/c\user = nginx' /etc/php-fpm.d/www.conf
 sed -i '/group = apache/c\group = nginx' /etc/php-fpm.d/www.conf
 sed -i '/pm = /c\pm = ondemand' /etc/php-fpm.d/www.conf
 sed -i '/pm.max_children = /c\pm.max_children = 1' /etc/php-fpm.d/www.conf
-sed -i '/pm.start_servers = /c\;pm.start_servers = 2' /etc/php-fpm.d/www.conf
-sed -i '/pm.min_spare_servers = /c\;pm.min_spare_servers = 1' /etc/php-fpm.d/www.conf
-sed -i '/pm.max_spare_servers = /c\;pm.max_spare_servers = 3' /etc/php-fpm.d/www.conf
 sed -i '/pm.process_idle_timeout = /c\pm.process_idle_timeout = 10s' /etc/php-fpm.d/www.conf
 sed -i '/pm.max_requests = /c\pm.max_requests = 0' /etc/php-fpm.d/www.conf
 rm /etc/my.cnf
