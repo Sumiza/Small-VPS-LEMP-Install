@@ -61,7 +61,7 @@ read -r RSP
 if [ "$RSP" = "y" ]; then
 echo "Logging into mysql"
 echo "MYSQL Password: " 
-read -r rootpasswd
+read -s -r rootpasswd
 echo "Database name you would like to create, something like (domainname) no special charecters"
 read -r DBNAME
 echo "Name of user for this database"
