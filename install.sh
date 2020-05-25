@@ -41,6 +41,10 @@ sed -i 's|pm.min_spare_servers = |;pm.min_spare_servers = 1|' /etc/php-fpm.d/www
 sed -i 's|pm.max_spare_servers = |;pm.max_spare_servers = 3|' /etc/php-fpm.d/www.conf
 sed -i 's|pm.process_idle_timeout = |pm.process_idle_timeout = 10s|' /etc/php-fpm.d/www.conf
 sed -i 's|pm.max_requests = |pm.max_requests = 0|' /etc/php-fpm.d/www.conf
+mkdir /usr/share/nginx/html/$DOMAINNAMEFQDN
+chmod 755 /usr/share/nginx/html/$DOMAINNAMEFQDN
+chown -R nginx:nginx /usr/share/nginx/html/$DOMAINNAMEFQDN
+wget --no-check-certificate https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/BlankNginx.conf -O /etc/nginx/conf.d/$DOMAINNAMEFQDN.conf
 
 rm install.sh
 echo "DONE DONE DONE DONE well not really but things are installed"
