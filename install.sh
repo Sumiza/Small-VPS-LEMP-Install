@@ -51,13 +51,13 @@ sed -i 's|WEBSITENAME|$DOMAINNAMEFQDN|' /etc/nginx/conf.d/$DOMAINNAMEFQDN.conf
 sed -i 's|WEBSITENAME|$DOMAINNAMEFQDN|' /etc/nginx/conf.d/$DOMAINNAMEFQDN.conf
 echo "Want to set up letsencrypt now? (y/n) only say yes if you have your dns set up already or it will fail" 
 read RSP
-if [ "$REP" = "y" ]; then
+if [ "$RSP" = "y" ]; then
 	certbot --nginx --register-unsafely-without-email
 fi
 /usr/bin/mysql_secure_installation
 echo "Want to set up a MYSQL Database now? (y/n)" 
 read RSP
-if [ "$REP" = "y" ]; then
+if [ "$RSP" = "y" ]; then
 echo "Logging into mysql"
 echo "MYSQL Password: " 
 read rootpasswd
