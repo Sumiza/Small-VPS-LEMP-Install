@@ -49,8 +49,7 @@ mkdir /usr/share/nginx/html/"$DOMAINNAMEFQDN"
 chmod 755 /usr/share/nginx/html/"$DOMAINNAMEFQDN"
 chown -R nginx:nginx /usr/share/nginx/html/"$DOMAINNAMEFQDN"
 wget --no-check-certificate https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/BlankNginx.conf -O /etc/nginx/conf.d/"$DOMAINNAMEFQDN".conf
-sed -i "s|WEBSITENAME|$DOMAINNAMEFQDN|" /etc/nginx/conf.d/"$DOMAINNAMEFQDN".conf
-sed -i "s|WEBSITENAME|$DOMAINNAMEFQDN|" /etc/nginx/conf.d/"$DOMAINNAMEFQDN".conf
+sed -i "s/WEBSITENAME/$DOMAINNAMEFQDN/g" /etc/nginx/conf.d/"$DOMAINNAMEFQDN".conf
 systemctl restart nginx && systemctl restart mariadb
 echo "Want to set up letsencrypt now? (y/n) only say yes if you have your dns set up already or it will fail" 
 read -r RSP
