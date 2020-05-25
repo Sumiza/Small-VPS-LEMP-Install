@@ -42,33 +42,33 @@ sed -i 's|pm.max_spare_servers = |;pm.max_spare_servers = 3|' /etc/php-fpm.d/www
 sed -i 's|pm.process_idle_timeout = |pm.process_idle_timeout = 10s|' /etc/php-fpm.d/www.conf
 sed -i 's|pm.max_requests = |pm.max_requests = 0|' /etc/php-fpm.d/www.conf
 echo "What is the fully qualified domain name (MyTestDomain.com) dont put the www."
-read DOMAINNAMEFQDN
-mkdir /usr/share/nginx/html/$DOMAINNAMEFQDN
-chmod 755 /usr/share/nginx/html/$DOMAINNAMEFQDN
-chown -R nginx:nginx /usr/share/nginx/html/$DOMAINNAMEFQDN
-wget --no-check-certificate https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/BlankNginx.conf -O /etc/nginx/conf.d/$DOMAINNAMEFQDN.conf
-sed -i 's|WEBSITENAME|$DOMAINNAMEFQDN|' /etc/nginx/conf.d/$DOMAINNAMEFQDN.conf
-sed -i 's|WEBSITENAME|$DOMAINNAMEFQDN|' /etc/nginx/conf.d/$DOMAINNAMEFQDN.conf
+read -r DOMAINNAMEFQDN
+mkdir /usr/share/nginx/html/"$DOMAINNAMEFQDN"
+chmod 755 /usr/share/nginx/html/"$DOMAINNAMEFQDN"
+chown -R nginx:nginx /usr/share/nginx/html/"$DOMAINNAMEFQDN"
+wget --no-check-certificate https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/BlankNginx.conf -O /etc/nginx/conf.d/"$DOMAINNAMEFQDN".conf
+sed -i "s|WEBSITENAME|$DOMAINNAMEFQDN|" /etc/nginx/conf.d/"$DOMAINNAMEFQDN".conf
+sed -i "s|WEBSITENAME|$DOMAINNAMEFQDN|" /etc/nginx/conf.d/"$DOMAINNAMEFQDN".conf
 echo "Want to set up letsencrypt now? (y/n) only say yes if you have your dns set up already or it will fail" 
-read RSP
+read -r RSP
 if [ "$RSP" = "y" ]; then
 	certbot --nginx --register-unsafely-without-email
 fi
 /usr/bin/mysql_secure_installation
 echo "Want to set up a MYSQL Database now? (y/n)" 
-read RSP
+read -r RSP
 if [ "$RSP" = "y" ]; then
 echo "Logging into mysql"
 echo "MYSQL Password: " 
-read rootpasswd
+read -r rootpasswd
 echo "Database name you would like to create, something like (domainname) no special charecters"
-read DBNAME
+read -r DBNAME
 echo "Name of user for this database"
-read DBUSER
+read -r DBUSER
 echo "Password for user $DBNAME"
-read DBPASS
-mysql -uroot -p$rootpasswd -e "create database $DBNAME;"
-mysql -uroot -p$rootpasswd -e "grant all on $DBNAME.* to '$DBUSER' identified by '$DBPASS';"
+read -r DBPASS
+mysql -uroot -p"$rootpasswd" -e "create database $DBNAME;"
+mysql -uroot -p"$rootpasswd" -e "grant all on $DBNAME.* to '$DBUSER' identified by '$DBPASS';"
 fi
 rm install.sh
 echo "DONE DONE DONE DONE"
