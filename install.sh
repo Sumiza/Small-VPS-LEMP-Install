@@ -49,7 +49,7 @@ cp /usr/share/nginx/index.html /usr/share/nginx/"$DOMAINNAMEFQDN"/index.html
 wget --no-check-certificate https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/BlankNginx.conf -O /etc/nginx/conf.d/"$DOMAINNAMEFQDN".conf
 sed -i "s/WEBSITENAME/$DOMAINNAMEFQDN/g" /etc/nginx/conf.d/"$DOMAINNAMEFQDN".conf
 systemctl restart nginx && systemctl restart mariadb
-echo "Want to set up letsencrypt now? (y/n) only say yes if you have your dns set up already or it will fail" 
+echo "Want to set up letsencrypt now? (y/n) only put y if you have your dns set up already or it will fail" 
 read -r RSP
 if [ "$RSP" = "y" ]; then
 	certbot --nginx --register-unsafely-without-email
@@ -71,7 +71,7 @@ mysql -uroot -p"$rootpasswd" -e "create database $DBNAME;"
 mysql -uroot -p"$rootpasswd" -e "grant all on $DBNAME.* to '$DBUSER' identified by '$DBPASS';"
 fi
 rm install.sh
-echo "DONE DONE DONE DONE make sure to note down this information:
+echo "DONE.... make sure to note down this information (if you set up a database):
 MYSQL Database : $DBNAME
 MYSQL User : $DBUSER
 MYSQL Password: $DBPASS
