@@ -53,6 +53,7 @@ echo "Want to set up letsencrypt now? (y/n) only put y if you have your dns set 
 read -r RSP
 if [ "$RSP" = "y" ]; then
 	certbot --nginx --register-unsafely-without-email
+	(crontab -l ; echo "0 3 */10 * * /usr/bin/certbot renew >/dev/null 2>&1") | crontab 
 fi
 /usr/bin/mysql_secure_installation
 echo "Want to set up a MYSQL Database now? (y/n)" 
