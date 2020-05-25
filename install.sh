@@ -29,18 +29,18 @@ systemctl enable mariadb
 systemctl enable nginx
 rm /etc/nginx/nginx.conf
 wget --no-check-certificate https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/nginx.conf -O /etc/nginx/nginx.conf
-sed -i 's|;listen = 127.0.0.1:9000|listen = /var/run/php-fpm/php-fpm.sock|' /etc/php-fpm.d/www.conf
-sed -i 's|listen.owner = |listen.owner = nginx|' /etc/php-fpm.d/www.conf
-sed -i 's|listen.group = |listen.group = nginx|' /etc/php-fpm.d/www.conf
-sed -i 's|user = |user = nginx|' /etc/php-fpm.d/www.conf
-sed -i 's|group = |group = nginx|' /etc/php-fpm.d/www.conf
-sed -i 's|pm = |pm = ondemand|' /etc/php-fpm.d/www.conf
-sed -i 's|pm.max_children = |pm.max_children = 1|' /etc/php-fpm.d/www.conf
-sed -i 's|pm.start_servers = |;pm.start_servers = 2|' /etc/php-fpm.d/www.conf
-sed -i 's|pm.min_spare_servers = |;pm.min_spare_servers = 1|' /etc/php-fpm.d/www.conf
-sed -i 's|pm.max_spare_servers = |;pm.max_spare_servers = 3|' /etc/php-fpm.d/www.conf
-sed -i 's|pm.process_idle_timeout = |pm.process_idle_timeout = 10s|' /etc/php-fpm.d/www.conf
-sed -i 's|pm.max_requests = |pm.max_requests = 0|' /etc/php-fpm.d/www.conf
+sed -i '/;listen = 127.0.0.1:9000/c\listen = /var/run/php-fpm/php-fpm.sock' /etc/php-fpm.d/www.conf
+sed -i '/listen.owner = /c\listen.owner = nginx' /etc/php-fpm.d/www.conf
+sed -i '/listen.group = /c\listen.group = nginx' /etc/php-fpm.d/www.conf
+sed -i '/user = /c\user = nginx' /etc/php-fpm.d/www.conf
+sed -i '/group = /c\group = nginx' /etc/php-fpm.d/www.conf
+sed -i '/pm = /c\pm = ondemand' /etc/php-fpm.d/www.conf
+sed -i '/pm.max_children = /c\pm.max_children = 1' /etc/php-fpm.d/www.conf
+sed -i '/pm.start_servers = /c\;pm.start_servers = 2' /etc/php-fpm.d/www.conf
+sed -i '/pm.min_spare_servers = /c\;pm.min_spare_servers = 1' /etc/php-fpm.d/www.conf
+sed -i '/pm.max_spare_servers = /c\;pm.max_spare_servers = 3' /etc/php-fpm.d/www.conf
+sed -i '/pm.process_idle_timeout = /c\pm.process_idle_timeout = 10s' /etc/php-fpm.d/www.conf
+sed -i '/pm.max_requests = /c\pm.max_requests = 0' /etc/php-fpm.d/www.conf
 echo "What is the fully qualified domain name (MyTestDomain.com) dont put the www."
 read -r DOMAINNAMEFQDN
 mkdir /usr/share/nginx/html/"$DOMAINNAMEFQDN"
