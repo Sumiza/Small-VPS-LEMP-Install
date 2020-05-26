@@ -87,9 +87,10 @@ systemctl restart mariadb && systemctl restart nginx && systemctl restart php-fp
 echo "Do you want wordpress installed (y/n)?"
 read -r RSP
 if [ "$RSP" = "y" ]; then
-wget http://wordpress.org/latest.tar.gz /usr/share/nginx/html/"$DOMAINNAMEFQDN"/latest.tar.gz
+wget -c http://wordpress.org/latest.tar.gz /usr/share/nginx/html/"$DOMAINNAMEFQDN"/latest.tar.gz
 tar -xzvf /usr/share/nginx/html/"$DOMAINNAMEFQDN"/latest.tar.gz
-mv ./* /usr/share/nginx/html/"$DOMAINNAMEFQDN"/wordpress/ /usr/share/nginx/html/"$DOMAINNAMEFQDN"/
+rm /usr/share/nginx/html/"$DOMAINNAMEFQDN"/latest.tar.gz
+mv /usr/share/nginx/html/"$DOMAINNAMEFQDN"/wordpress/* /usr/share/nginx/html/"$DOMAINNAMEFQDN"/
 rmdir /usr/share/nginx/html/"$DOMAINNAMEFQDN"/wordpress/
 chown -R nginx:nginx /usr/share/nginx/html/"$DOMAINNAMEFQDN"/
 find /usr/share/nginx/html/"$DOMAINNAMEFQDN"/ -type d -exec chmod 775 {} \;
