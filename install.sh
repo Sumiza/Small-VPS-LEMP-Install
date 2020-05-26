@@ -91,3 +91,8 @@ MYSQL Database : $DBNAME
 MYSQL User : $DBUSER
 MYSQL Password: $DBPASS
 -----------------------------------"
+if [ "$RSP1" = "1" ]; then
+echo "Hit enter to reboot after initial install"
+read RSP
+reboot
+fi
