@@ -48,7 +48,6 @@ rm /etc/my.cnf
 wget https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/my.conf -O /etc/my.cnf
 systemctl restart mariadb
 /usr/bin/mysql_secure_installation
-(crontab -l ; echo "0 3 */10 * * /usr/bin/certbot renew >/dev/null 2>&1") | crontab 
 fi
 #----- Initial install done -----------
 echo "What is the fully qualified domain name (MyTestDomain.com) dont put the www."
