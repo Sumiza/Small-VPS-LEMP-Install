@@ -56,7 +56,7 @@ read -r DOMAINNAMEFQDN
 mkdir /usr/share/nginx/html/"$DOMAINNAMEFQDN"
 chmod 755 /usr/share/nginx/html/"$DOMAINNAMEFQDN"
 chown -R nginx:nginx /usr/share/nginx/html/"$DOMAINNAMEFQDN"
-cp /usr/share/nginx/index.html /usr/share/nginx/"$DOMAINNAMEFQDN"/index.html
+cp /usr/share/nginx/html/index.html /usr/share/nginx/html/"$DOMAINNAMEFQDN"/index.html
 wget https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/BlankNginx.conf -O /etc/nginx/conf.d/"$DOMAINNAMEFQDN".conf
 sed -i "s/WEBSITENAME/$DOMAINNAMEFQDN/g" /etc/nginx/conf.d/"$DOMAINNAMEFQDN".conf
 systemctl restart nginx
