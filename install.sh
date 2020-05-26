@@ -83,13 +83,13 @@ read -r DBPASS
 mysql -uroot -p"$rootpasswd" -e "create database $DBNAME;"
 mysql -uroot -p"$rootpasswd" -e "grant all on $DBNAME.* to '$DBUSER' identified by '$DBPASS';"
 fi
-systemctl restart mariadb && systemctl restart nginx && systemctl restart php-fpm
 echo "DONE.... make sure to note down this information (if you set up a database):
 ----------------------------------
 MYSQL Database : $DBNAME
 MYSQL User : $DBUSER
 MYSQL Password: $DBPASS
 -----------------------------------"
+systemctl restart mariadb && systemctl restart nginx && systemctl restart php-fpm
 if [ "$RSP1" = "1" ]; then
 echo "Hit enter to reboot after initial install"
 read RSP
