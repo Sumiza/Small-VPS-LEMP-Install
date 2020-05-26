@@ -73,6 +73,7 @@ mysql -uroot -p"$rootpasswd" -e "grant all on $DBNAME.* to '$DBUSER' identified 
 fi
 rm install.sh
 echo "DONE.... make sure to note down this information (if you set up a database):
+----------------------------------
 MYSQL Database : $DBNAME
 MYSQL User : $DBUSER
 MYSQL Password: $DBPASS
