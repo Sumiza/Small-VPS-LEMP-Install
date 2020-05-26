@@ -63,10 +63,10 @@ systemctl restart nginx
 echo "Want to set up letsencrypt now? (y/n) only put y if you have your dns set up already or it will fail" 
 read -r RSP
 if [ "$RSP" = "y" ]; then
-	certbot --nginx --register-unsafely-without-email
 	if [ "$RSP1" = "1" ]; then
 		(crontab -l ; echo "0 3 */10 * * /usr/bin/certbot renew >/dev/null 2>&1") | crontab 
 	fi
+	certbot --nginx --register-unsafely-without-email
 fi
 echo "Want to set up a MYSQL Database now? (y/n)" 
 read -r RSP
