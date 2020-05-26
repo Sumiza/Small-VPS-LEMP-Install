@@ -83,15 +83,31 @@ read -r DBPASS
 mysql -uroot -p"$rootpasswd" -e "create database $DBNAME;"
 mysql -uroot -p"$rootpasswd" -e "grant all on $DBNAME.* to '$DBUSER' identified by '$DBPASS';"
 fi
-echo "DONE.... make sure to note down this information (if you set up a database):
+systemctl restart mariadb && systemctl restart nginx && systemctl restart php-fpm
+echo "Do you want wordpress installed (y/n)?"
+read -r RSP
+if [ "$RSP" = "y" ]; then
+wget http://wordpress.org/latest.tar.gz /usr/share/nginx/html/"$DOMAINNAMEFQDN"/latest.tar.gz
+tar -xzvf /usr/share/nginx/html/"$DOMAINNAMEFQDN"/latest.tar.gz
+mv ./* /usr/share/nginx/html/"$DOMAINNAMEFQDN"/wordpress/ /usr/share/nginx/html/"$DOMAINNAMEFQDN"/
+rmdir /usr/share/nginx/html/"$DOMAINNAMEFQDN"/wordpress/
+chown -R nginx:nginx /usr/share/nginx/html/"$DOMAINNAMEFQDN"/
+find /usr/share/nginx/html/"$DOMAINNAMEFQDN"/ -type d -exec chmod 775 {} \;
+find /usr/share/nginx/html/"$DOMAINNAMEFQDN"/ -type f -exec chmod 664 {} \;
+chmod 660 /usr/share/nginx/html/"$DOMAINNAMEFQDN"/wp-config.php
+echo "If all went well wordpress has been installed with standard premissions,
+just go to your website to finish the install (if this your inital install reboot first)
+"
+fi
+echo "make sure to note down this information (if you set up a database):
 ----------------------------------
 MYSQL Database : $DBNAME
 MYSQL User : $DBUSER
 MYSQL Password: $DBPASS
------------------------------------"
-systemctl restart mariadb && systemctl restart nginx && systemctl restart php-fpm
+-----------------------------------
+------DONE enjoy your install------"
 if [ "$RSP1" = "1" ]; then
 echo "Hit enter to reboot after initial install"
-read RSP
+read -r RSP
 reboot
 fi
