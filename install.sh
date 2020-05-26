@@ -3,8 +3,8 @@ clear
 echo "Please select which install:
 1. Initial install
 2. Adding another website"
-read -r RSP
-if [ "$RSP" = "1" ]; then
+read -r RSP1
+if [ "$RSP1" = "1" ]; then
 yum update -y
 yum install -y epel-release
 yum -y install https://rpms.remirepo.net/enterprise/remi-release-7.rpm
@@ -48,6 +48,7 @@ rm /etc/my.cnf
 wget https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/my.conf -O /etc/my.cnf
 systemctl restart mariadb
 /usr/bin/mysql_secure_installation
+(crontab -l ; echo "0 3 */10 * * /usr/bin/certbot renew >/dev/null 2>&1") | crontab 
 fi
 #----- Initial install done -----------
 echo "What is the fully qualified domain name (MyTestDomain.com) dont put the www."
@@ -63,7 +64,9 @@ echo "Want to set up letsencrypt now? (y/n) only put y if you have your dns set 
 read -r RSP
 if [ "$RSP" = "y" ]; then
 	certbot --nginx --register-unsafely-without-email
-	(crontab -l ; echo "0 3 */10 * * /usr/bin/certbot renew >/dev/null 2>&1") | crontab 
+	if [ "$RSP1" = "1" ]; then
+		(crontab -l ; echo "0 3 */10 * * /usr/bin/certbot renew >/dev/null 2>&1") | crontab 
+	fi
 fi
 echo "Want to set up a MYSQL Database now? (y/n)" 
 read -r RSP
