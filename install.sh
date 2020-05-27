@@ -2,9 +2,12 @@
 clear
 echo "Please select which install:
 1. Initial install
-2. Adding another website"
+2. Adding another website
+3. Apply letsencrypt to already installed site
+4. Set up new MYSQL Database"
 read -r RSP1
 if [ "$RSP1" = "1" ]; then
+#---- yum can crash if these are all combined
 yum update -y
 yum install -y epel-release
 yum -y install https://rpms.remirepo.net/enterprise/remi-release-7.rpm
@@ -50,7 +53,9 @@ systemctl restart mariadb
 /usr/bin/mysql_secure_installation
 fi
 #----- Initial install done -----------
-echo "What is the fully qualified domain name (MyTestDomain.com) dont put the www."
+
+if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ]; then
+echo "What is the fully qualified domain name (mytestdomain.com) dont put the www."
 read -r DOMAINNAMEFQDN
 mkdir /usr/share/nginx/html/"$DOMAINNAMEFQDN"
 chmod 755 /usr/share/nginx/html/"$DOMAINNAMEFQDN"
@@ -59,30 +64,8 @@ cp /usr/share/nginx/html/index.html /usr/share/nginx/html/"$DOMAINNAMEFQDN"/inde
 wget https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/BlankNginx.conf -O /etc/nginx/conf.d/"$DOMAINNAMEFQDN".conf
 sed -i "s/WEBSITENAME/$DOMAINNAMEFQDN/g" /etc/nginx/conf.d/"$DOMAINNAMEFQDN".conf
 systemctl restart nginx
-echo "Want to set up letsencrypt now? (y/n) only put y if you have your dns set up already or it will fail" 
-read -r RSP
-if [ "$RSP" = "y" ]; then
-	if [ "$RSP1" = "1" ]; then
-		(crontab -l ; echo "0 3 */10 * * /usr/bin/certbot renew >/dev/null 2>&1") | crontab 
-	fi
-	certbot --nginx --register-unsafely-without-email
-fi
-echo "Want to set up a MYSQL Database now? (y/n)" 
-read -r RSP
-if [ "$RSP" = "y" ]; then
-echo "Logging into mysql"
-echo "MYSQL Password: " 
-read -s -r rootpasswd
-echo "Database name you would like to create, something like (domainname) no special charecters"
-read -r DBNAME
-echo "Name of user for this database"
-read -r DBUSER
-echo "Password for user $DBNAME"
-read -r DBPASS
-mysql -uroot -p"$rootpasswd" -e "create database $DBNAME;"
-mysql -uroot -p"$rootpasswd" -e "grant all on $DBNAME.* to '$DBUSER' identified by '$DBPASS';"
-fi
-systemctl restart mariadb && systemctl restart nginx && systemctl restart php-fpm
+#------ files for website installed
+
 echo "Do you want wordpress installed (y/n)?"
 read -r RSP
 if [ "$RSP" = "y" ]; then
@@ -94,17 +77,58 @@ rmdir /usr/share/nginx/html/"$DOMAINNAMEFQDN"/wordpress/
 chown -R nginx:nginx /usr/share/nginx/html/"$DOMAINNAMEFQDN"/
 find /usr/share/nginx/html/"$DOMAINNAMEFQDN"/ -type d -exec chmod 775 {} \;
 find /usr/share/nginx/html/"$DOMAINNAMEFQDN"/ -type f -exec chmod 664 {} \;
-echo "If all went well wordpress has been installed with standard premissions,
-just go to your website to finish the install (if this your inital install reboot first)
-"
+echo "----------------------------------------------
+If all went well wordpress has been installed with standard premissions"
 fi
-echo "make sure to note down this information (if you set up a database):
+#------ Wordpress installed
+fi
+
+if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "4" ]; then
+echo "Want to set up a MYSQL Database now? (y/n)" 
+read -r RSP
+if [ "$RSP" = "y" ]; then
+echo "Logging into mysql"
+echo "MYSQL Password: " 
+read -s -r rootpasswd
+echo "Database name you would like to create, something like (domainname) no special charecters"
+read -r DBNAME
+echo "Name of user for $DBNAME"
+read -r DBUSER
+echo "Password for user $DBUSER"
+read -r DBPASS
+mysql -uroot -p"$rootpasswd" -e "create database $DBNAME;"
+mysql -uroot -p"$rootpasswd" -e "grant all on $DBNAME.* to '$DBUSER' identified by '$DBPASS';"
+fi
+fi
+#----- Database setup done
+
+if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "3" ]; then
+echo "Want to set up letsencrypt now? (y/n) only put y if you have your dns set up already or it will fail, this can be run at a later time." 
+read -r RSP
+        if [ "$RSP" = "y" ]; then
+        echo "Do you want to provide your email to letsencrypt (y/n)"
+        read -r RSP
+                if [ "$RSP" = "y" ]; then
+                certbot --nginx
+	        else
+	        certbot --nginx --register-unsafely-without-email
+	        fi
+	(crontab -l | grep '/usr/bin/certbot renew') || (crontab -l ; echo "0 3 */10 * * /usr/bin/certbot renew >/dev/null 2>&1") | crontab
+	echo "Adding cron job so that letsencrypt will auto renew"
+	systemctl restart nginx
+        fi
+fi
+#-------- letsencrypt installed
+
+if ! [ "$DBNAME" = "" ]; then
+echo "make sure to note down this information:
 ----------------------------------
 MYSQL Database : $DBNAME
 MYSQL User : $DBUSER
 MYSQL Password: $DBPASS
------------------------------------
-------DONE enjoy your install------"
+-----------------------------------"
+fi
+echo "----------DONE ENJOY-------------"
 if [ "$RSP1" = "1" ]; then
 echo "Hit enter to reboot after initial install"
 read -r RSP
