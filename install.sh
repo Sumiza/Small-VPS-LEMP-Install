@@ -7,6 +7,10 @@ echo "Please select which install:
 4. Set up new MYSQL Database"
 read -r RSP1
 if [ "$RSP1" = "1" ]; then
+echo "Install Settings:
+1. Low memory VPS (tested 128mb ram)
+2. Default settings"
+read -r RSP2
 #---- yum can crash if these are all combined
 yum update -y
 yum install -y epel-release
@@ -43,12 +47,18 @@ sed -i '/listen.owner = /c\listen.owner = nginx' /etc/php-fpm.d/www.conf
 sed -i '/listen.group = /c\listen.group = nginx' /etc/php-fpm.d/www.conf
 sed -i '/user = apache/c\user = nginx' /etc/php-fpm.d/www.conf
 sed -i '/group = apache/c\group = nginx' /etc/php-fpm.d/www.conf
+#------Standard install
+
+if [ "$RSP2" = "1" ]; then
 sed -i '/pm = /c\pm = ondemand' /etc/php-fpm.d/www.conf
 sed -i '/pm.max_children = /c\pm.max_children = 1' /etc/php-fpm.d/www.conf
 sed -i '/pm.process_idle_timeout = /c\pm.process_idle_timeout = 10s' /etc/php-fpm.d/www.conf
 sed -i '/pm.max_requests = /c\pm.max_requests = 0' /etc/php-fpm.d/www.conf
 rm /etc/my.cnf
 wget https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/my.conf -O /etc/my.cnf
+fi
+#------ Low memory settings
+
 systemctl restart mariadb
 /usr/bin/mysql_secure_installation
 fi
