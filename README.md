@@ -1,8 +1,10 @@
 # Small-VPS-LEMP-Install
-LEMP Install settings on a low ram VPS tested on 128mb
+LEMP Installer for ipv6
 
 CentOS 7 ONLY
 IPv6
+
+comes in two versions, default settings for any standard server and low ram settings for servers with low ram.
 
 bash <(wget -qO- https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/install.sh)
 
