@@ -98,6 +98,7 @@ echo "Password for user $DBUSER"
 read -r DBPASS
 mysql -uroot -p"$rootpasswd" -e "create database $DBNAME;"
 mysql -uroot -p"$rootpasswd" -e "grant all on $DBNAME.* to '$DBUSER' identified by '$DBPASS';"
+echo "If no error the database was created successfully" 
 fi
 fi
 #----- Database setup done
