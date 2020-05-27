@@ -9,7 +9,7 @@ read -r RSP1
 if [ "$RSP1" = "1" ]; then
 echo "Install Settings:
 1. Low memory VPS (tested 128mb ram)
-2. Default settings"
+2. Default php-fmp and mariadb settings"
 read -r RSP2
 #---- yum can crash if these are all combined
 yum update -y
@@ -65,7 +65,7 @@ fi
 #----- Initial install done -----------
 
 if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ]; then
-echo "What is the fully qualified domain name (mytestdomain.com) dont put the www."
+echo "What is the fully qualified domain name (mytestdomain.com) dont put the www.:"
 read -r DOMAINNAMEFQDN
 mkdir /usr/share/nginx/html/"$DOMAINNAMEFQDN"
 chmod 755 /usr/share/nginx/html/"$DOMAINNAMEFQDN"
@@ -100,11 +100,11 @@ if [ "$RSP" = "y" ]; then
 echo "Logging into mysql"
 echo "MYSQL Password: " 
 read -s -r rootpasswd
-echo "Database name you would like to create, something like (domainname) no special charecters"
+echo "Database name you would like to create, something like (domainname) no special charecters:"
 read -r DBNAME
-echo "Name of user for $DBNAME"
+echo "Name of user for $DBNAME:"
 read -r DBUSER
-echo "Password for user $DBUSER"
+echo "Password for user $DBUSER:"
 read -r DBPASS
 mysql -uroot -p"$rootpasswd" -e "create database $DBNAME;"
 mysql -uroot -p"$rootpasswd" -e "grant all on $DBNAME.* to '$DBUSER' identified by '$DBPASS';"
