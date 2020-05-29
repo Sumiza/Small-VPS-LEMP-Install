@@ -7,9 +7,9 @@ echo "Please select which install:
 4. Set up new MYSQL Database"
 read -r RSP1
 if [ "$RSP1" = "1" ]; then
-        echo "Install Settings:
-        1. Low memory VPS (tested 128mb ram)
-        2. Default php-fmp and mariadb settings"
+        echo "Install Settings:"
+        echo "1. Low memory VPS (tested 128mb ram)"
+        echo "2. Default php-fmp and mariadb settings"
         read -r RSP2
         #---- yum can crash if these are all combined
         yum update -y
@@ -87,8 +87,8 @@ if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ]; then
                 chown -R nginx:nginx /usr/share/nginx/html/"$DOMAINNAMEFQDN"/
                 find /usr/share/nginx/html/"$DOMAINNAMEFQDN"/ -type d -exec chmod 775 {} \;
                 find /usr/share/nginx/html/"$DOMAINNAMEFQDN"/ -type f -exec chmod 664 {} \;
-                echo "----------------------------------------------
-                If all went well wordpress has been installed with standard premissions"
+                echo "----------------------------------------------"
+                echo "If all went well wordpress has been installed with standard premissions"
         fi
         #------ Wordpress installed
 fi
@@ -96,7 +96,7 @@ fi
 if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "4" ]; then
         echo "Want to set up a MYSQL Database now? (y/n)" 
         read -r RSP
-        if [ "$RSP" = "y" ]; then
+                if [ "$RSP" = "y" ]; then
                 echo "Logging into mysql"
                 echo "MYSQL Password: " 
                 read -s -r rootpasswd
@@ -121,7 +121,7 @@ if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "3" ]; then
                 read -r RSP
                 if [ "$RSP" = "y" ]; then
                         certbot --nginx
-                else
+                        else
                         certbot --nginx --register-unsafely-without-email
                 fi
         	(crontab -l | grep '/usr/bin/certbot renew') || (crontab -l ; echo "0 3 */10 * * /usr/bin/certbot renew >/dev/null 2>&1") | crontab
@@ -132,12 +132,12 @@ fi
 #-------- letsencrypt installed
 
 if ! [ "$DBNAME" = "" ]; then
-        echo "make sure to note down this information:
-        ----------------------------------
-        MYSQL Database : $DBNAME
-        MYSQL User : $DBUSER
-        MYSQL Password: $DBPASS
-        -----------------------------------"
+        echo "make sure to note down this information:"
+        echo "----------------------------------"
+        echo "MYSQL Database : $DBNAME"
+        echo "MYSQL User : $DBUSER"
+        echo "MYSQL Password: $DBPASS"
+        echo "-----------------------------------"
 fi
 echo "----------DONE ENJOY-------------"
 if [ "$RSP1" = "1" ]; then
