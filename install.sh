@@ -96,7 +96,7 @@ fi
 if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "4" ]; then
         echo "Want to set up a MYSQL Database now? (y/n)" 
         read -r RSP
-                if [ "$RSP" = "y" ]; then
+        if [ "$RSP" = "y" ]; then
                 echo "Logging into mysql"
                 echo "MYSQL Password: " 
                 read -s -r rootpasswd
@@ -121,7 +121,7 @@ if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "3" ]; then
                 read -r RSP
                 if [ "$RSP" = "y" ]; then
                         certbot --nginx
-                        else
+                else
                         certbot --nginx --register-unsafely-without-email
                 fi
         	(crontab -l | grep '/usr/bin/certbot renew') || (crontab -l ; echo "0 3 */10 * * /usr/bin/certbot renew >/dev/null 2>&1") | crontab
