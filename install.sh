@@ -25,7 +25,6 @@ yum install -y certbot
 yum install -y python2-certbot-nginx
 yum install -y mariadb-server
 yum install -y php
-yum install -y php-common
 yum install -y php-mysql
 yum install -y php-gd
 yum install -y php-xml
