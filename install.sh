@@ -37,7 +37,13 @@ if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "4" ]; then
         echo "Password for user $DBUSER:"
         read -r DBPASS
 fi
-
+if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "3" ]; then
+        echo "Want to set up letsencrypt now? (y/n) only put y if you have your dns set up already or it will fail, this can be run at a later time." 
+        read -r RSPLETSENCRYPT
+fi
+clear
+echo "The install and setup will take a few minutes,"
+sleep 5
 #------------------ Questions DONE
 
 if [ "$RSP1" = "1" ]; then
@@ -92,7 +98,7 @@ if [ "$RSP1" = "1" ]; then
         systemctl restart mariadb
         /usr/bin/mysql_secure_installation
         mysql -e "SET PASSWORD FOR root@localhost = PASSWORD('$RSPMYSQLROOTPASS');FLUSH PRIVILEGES;" 
-        printf "$RSPMYSQLROOTPASS\n n\n Y\n Y\n Y\n Y\n Y\n" | sudo mysql_secure_installation
+        printf "$RSPMYSQLROOTPASS\n n\n Y\n Y\n Y\n Y\n Y\n" | mysql_secure_installation
 fi
 #----- Initial install done -----------
 
@@ -115,8 +121,6 @@ if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ]; then
                 chown -R nginx:nginx /usr/share/nginx/html/"$DOMAINNAMEFQDN"/
                 find /usr/share/nginx/html/"$DOMAINNAMEFQDN"/ -type d -exec chmod 775 {} \;
                 find /usr/share/nginx/html/"$DOMAINNAMEFQDN"/ -type f -exec chmod 664 {} \;
-                echo "----------------------------------------------"
-                echo "If all went well wordpress has been installed with standard premissions"
         fi
         #------ Wordpress installed
 fi
@@ -126,20 +130,18 @@ if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "4" ]; then
         if [ "$RSPMYSQL" = "y" ]; then
                 mysql -uroot -p"$rootpasswd" -e "create database $DBNAME;"
                 mysql -uroot -p"$rootpasswd" -e "grant all on $DBNAME.* to '$DBUSER' identified by '$DBPASS';"
-                echo "If no error the database was created successfully" 
         fi
 fi
 #----- Database setup done
 
 if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "3" ]; then
-        echo "Want to set up letsencrypt now? (y/n) only put y if you have your dns set up already or it will fail, this can be run at a later time." 
-        read -r RSP
-        if [ "$RSP" = "y" ]; then
+        if [ "$RSPLETSENCRYPT" = "y" ]; then
+        clear
                 echo "Do you want to provide your email to letsencrypt (y/n)"
                 read -r RSP
                 if [ "$RSP" = "y" ]; then
                         certbot --nginx
-                        else
+                else
                         certbot --nginx --register-unsafely-without-email
                 fi
         	(crontab -l | grep '/usr/bin/certbot renew') || (crontab -l ; echo "0 3 */10 * * /usr/bin/certbot renew >/dev/null 2>&1") | crontab
