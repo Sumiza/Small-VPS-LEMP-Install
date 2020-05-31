@@ -22,20 +22,22 @@ if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ]; then
         
 fi
 if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "4" ]; then
-        echo "Want to set up a MYSQL Database now? (y/n)" 
+        echo "Want to set up a MYSQL Database now? (y/n)"
         read -r RSPMYSQL
-        if [ "$RSPMYSQLROOTPASS" = "" ]; then
-                echo "MYSQL Password: " 
-                read -s -r rootpasswd
-        else
-                rootpasswd=$RSPMYSQLROOTPASS
+        if [ "$RSPMYSQL" = "y" ]; then
+                if [ "$RSPMYSQLROOTPASS" = "" ]; then
+                        echo "MYSQL Password: " 
+                        read -s -r rootpasswd
+                else
+                        rootpasswd=$RSPMYSQLROOTPASS
+                fi
+                echo "Database name you would like to create, something like (domainname) no special charecters:"
+                read -r DBNAME
+                echo "Name of user for $DBNAME:"
+                read -r DBUSER
+                echo "Password for user $DBUSER:"
+                read -r DBPASS
         fi
-        echo "Database name you would like to create, something like (domainname) no special charecters:"
-        read -r DBNAME
-        echo "Name of user for $DBNAME:"
-        read -r DBUSER
-        echo "Password for user $DBUSER:"
-        read -r DBPASS
 fi
 if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "3" ]; then
         echo "Want to set up letsencrypt now? (y/n) only put y if you have your dns set up already or it will fail, this can be run at a later time." 
@@ -98,7 +100,7 @@ if [ "$RSP1" = "1" ]; then
         systemctl restart mariadb
         mysql -e "SET PASSWORD FOR root@localhost = PASSWORD('$RSPMYSQLROOTPASS');FLUSH PRIVILEGES;" 
         printf "$RSPMYSQLROOTPASS \n n\n Y\n Y\n Y\n Y\n Y\n" | mysql_secure_installation
-        sleep 5
+        sleep 15
 fi
 #----- Initial install done -----------
 
