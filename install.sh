@@ -135,7 +135,7 @@ fi
 
 if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "3" ]; then
         if [ "$RSPLETSENCRYPT" = "y" ]; then
-        clear
+                echo "-------------------------------------------------------"
                 echo "Do you want to provide your email to letsencrypt (y/n)"
                 read -r RSP
                 if [ "$RSP" = "y" ]; then
