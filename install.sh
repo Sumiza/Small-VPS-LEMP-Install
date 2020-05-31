@@ -42,7 +42,7 @@ if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "3" ]; then
         read -r RSPLETSENCRYPT
 fi
 clear
-echo "The install and setup will take a few minutes"
+echo "The install and setup will take a few minutes,"
 sleep 5
 #------------------ Questions DONE
 
@@ -98,7 +98,7 @@ if [ "$RSP1" = "1" ]; then
         systemctl restart mariadb
         /usr/bin/mysql_secure_installation
         mysql -e "SET PASSWORD FOR root@localhost = PASSWORD('$RSPMYSQLROOTPASS');FLUSH PRIVILEGES;" 
-        printf "$RSPMYSQLROOTPASS\n n\n Y\n Y\n Y\n Y\n Y\n" | mysql_secure_installation
+        printf "$RSPMYSQLROOTPASS \n n\n Y\n Y\n Y\n Y\n Y\n" | mysql_secure_installation
 fi
 #----- Initial install done -----------
 
