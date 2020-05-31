@@ -11,6 +11,36 @@ if [ "$RSP1" = "1" ]; then
         echo "1. Low memory VPS (tested 128mb ram)"
         echo "2. Default php-fmp and mariadb settings"
         read -r RSP2
+        echo "Pick a password to secure MYSQL:"
+        read -r -s RSPMYSQLROOTPASS
+fi
+if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ]; then
+        echo "What is the fully qualified domain name (mytestdomain.com) dont put the www.:"
+        read -r DOMAINNAMEFQDN
+        echo "Do you want wordpress installed (y/n)?"
+        read -r RSPWP
+        
+fi
+if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "4" ]; then
+        echo "Want to set up a MYSQL Database now? (y/n)" 
+        read -r RSPMYSQL
+        if [ "$RSPMYSQLROOTPASS" = "" ]; then
+                echo "MYSQL Password: " 
+                read -s -r rootpasswd
+        else
+                rootpasswd=$RSPMYSQLROOTPASS
+        fi
+        echo "Database name you would like to create, something like (domainname) no special charecters:"
+        read -r DBNAME
+        echo "Name of user for $DBNAME:"
+        read -r DBUSER
+        echo "Password for user $DBUSER:"
+        read -r DBPASS
+fi
+
+#------------------ Questions DONE
+
+if [ "$RSP1" = "1" ]; then
         #---- yum can crash if these are all combined
         yum update -y
         yum install -y epel-release
@@ -61,12 +91,12 @@ if [ "$RSP1" = "1" ]; then
         
         systemctl restart mariadb
         /usr/bin/mysql_secure_installation
+        mysql -e "SET PASSWORD FOR root@localhost = PASSWORD('$RSPMYSQLROOTPASS');FLUSH PRIVILEGES;" 
+        printf "$RSPMYSQLROOTPASS\n n\n Y\n Y\n Y\n Y\n Y\n" | sudo mysql_secure_installation
 fi
 #----- Initial install done -----------
 
 if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ]; then
-        echo "What is the fully qualified domain name (mytestdomain.com) dont put the www.:"
-        read -r DOMAINNAMEFQDN
         mkdir /usr/share/nginx/html/"$DOMAINNAMEFQDN"
         chmod 755 /usr/share/nginx/html/"$DOMAINNAMEFQDN"
         chown -R nginx:nginx /usr/share/nginx/html/"$DOMAINNAMEFQDN"
@@ -76,9 +106,7 @@ if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ]; then
         systemctl restart nginx
         #------ files for website installed
         
-        echo "Do you want wordpress installed (y/n)?"
-        read -r RSP
-        if [ "$RSP" = "y" ]; then
+        if [ "$RSPWP" = "y" ]; then
                 wget http://wordpress.org/latest.tar.gz -O /usr/share/nginx/html/"$DOMAINNAMEFQDN"/latest.tar.gz
                 tar -xzvf /usr/share/nginx/html/"$DOMAINNAMEFQDN"/latest.tar.gz -C /usr/share/nginx/html/"$DOMAINNAMEFQDN"/
                 rm /usr/share/nginx/html/"$DOMAINNAMEFQDN"/latest.tar.gz
@@ -94,18 +122,8 @@ if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ]; then
 fi
 
 if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "4" ]; then
-        echo "Want to set up a MYSQL Database now? (y/n)" 
-        read -r RSP
-                if [ "$RSP" = "y" ]; then
-                echo "Logging into mysql"
-                echo "MYSQL Password: " 
-                read -s -r rootpasswd
-                echo "Database name you would like to create, something like (domainname) no special charecters:"
-                read -r DBNAME
-                echo "Name of user for $DBNAME:"
-                read -r DBUSER
-                echo "Password for user $DBUSER:"
-                read -r DBPASS
+
+        if [ "$RSPMYSQL" = "y" ]; then
                 mysql -uroot -p"$rootpasswd" -e "create database $DBNAME;"
                 mysql -uroot -p"$rootpasswd" -e "grant all on $DBNAME.* to '$DBUSER' identified by '$DBPASS';"
                 echo "If no error the database was created successfully" 
