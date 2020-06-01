@@ -11,8 +11,7 @@ if [ "$RSP1" = "1" ]; then
         echo "1. Low memory VPS (tested 128mb ram)"
         echo "2. Default php-fmp and mariadb settings"
         read -r RSP2
-        echo "Pick a password to secure MYSQL:"
-        read -r -s RSPMYSQLROOTPASS
+        RSPMYSQLROOTPASS=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c10)
 fi
 if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ]; then
         echo "What is the fully qualified domain name (mytestdomain.com) dont put the www.:"
@@ -26,17 +25,14 @@ if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "4" ]; then
         read -r RSPMYSQL
         if [ "$RSPMYSQL" = "y" ]; then
                 if [ "$RSPMYSQLROOTPASS" = "" ]; then
-                        echo "MYSQL Password: " 
+                        echo "MYSQL root Password: " 
                         read -s -r rootpasswd
                 else
                         rootpasswd=$RSPMYSQLROOTPASS
                 fi
-                echo "Database name you would like to create, something like (domainname) no special charecters:"
-                read -r DBNAME
-                echo "Name of user for $DBNAME:"
-                read -r DBUSER
-                echo "Password for user $DBUSER:"
-                read -r DBPASS
+                DBNAME=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c10)
+                DBUSER=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c10)
+                DBPASS=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c10)
         fi
 fi
 if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "3" ]; then
@@ -100,7 +96,7 @@ if [ "$RSP1" = "1" ]; then
         systemctl restart mariadb
         mysql -e "SET PASSWORD FOR root@localhost = PASSWORD('$RSPMYSQLROOTPASS');FLUSH PRIVILEGES;" 
         printf "$RSPMYSQLROOTPASS \n n\n Y\n Y\n Y\n Y\n Y\n" | mysql_secure_installation
-        sleep 15
+        sleep 5
 fi
 #----- Initial install done -----------
 
@@ -138,17 +134,10 @@ fi
 
 if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "3" ]; then
         if [ "$RSPLETSENCRYPT" = "y" ]; then
-                echo "-------------------------------------------------------"
-                echo "Do you want to provide your email to letsencrypt (y/n)"
-                read -r RSP
-                if [ "$RSP" = "y" ]; then
-                        certbot --nginx
-                else
-                        certbot --nginx --register-unsafely-without-email
-                fi
-        	(crontab -l | grep '/usr/bin/certbot renew') || (crontab -l ; echo "0 3 */10 * * /usr/bin/certbot renew >/dev/null 2>&1") | crontab
-        	echo "Adding cron job so that letsencrypt will auto renew"
-        	systemctl restart nginx
+        printf "\n" | certbot certonly --nginx --register-unsafely-without-email
+        (crontab -l | grep '/usr/bin/certbot renew') || (crontab -l ; echo "0 3 */10 * * /usr/bin/certbot renew >/dev/null 2>&1") | crontab
+        echo "Adding cron job so that letsencrypt will auto renew"
+        systemctl restart nginx
         fi
 fi
 #-------- letsencrypt installed
@@ -156,6 +145,7 @@ fi
 if ! [ "$DBNAME" = "" ]; then
         echo "make sure to note down this information:"
         echo "----------------------------------"
+        echo "MYSQL Root Password : $rootpasswd"
         echo "MYSQL Database : $DBNAME"
         echo "MYSQL User : $DBUSER"
         echo "MYSQL Password: $DBPASS"
