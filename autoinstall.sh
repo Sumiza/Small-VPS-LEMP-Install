@@ -40,8 +40,6 @@ if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "3" ]; then
         read -r RSPLETSENCRYPT
 fi
 clear
-echo "The install and setup will take a few minutes"
-sleep 5
 #------------------ Questions DONE
 
 if [ "$RSP1" = "1" ]; then
