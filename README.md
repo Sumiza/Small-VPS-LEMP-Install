@@ -13,3 +13,7 @@ This was just written for a 128mb server from https://hosting.gullo.me/ but woul
 It has no safeguards built in, if you type something wrong it will just break, dont have to try.
 
 Do not use this if you are installing this on any other OS, if youre looking for command line installer that does it all a good one is https://centminmod.com/
+
+
+bash <(wget -qO- https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/autoinstall.sh)
+for just saying yes to all the answers
