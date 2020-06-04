@@ -132,7 +132,7 @@ fi
 
 if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "3" ]; then
         if [ "$RSPLETSENCRYPT" = "y" ]; then
-        printf "\n" | certbot certonly --nginx --register-unsafely-without-email
+        printf "A\n \n" | certbot certonly --nginx --register-unsafely-without-email
         (crontab -l | grep '/usr/bin/certbot renew') || (crontab -l ; echo "0 3 */10 * * /usr/bin/certbot renew >/dev/null 2>&1") | crontab
         echo "Adding cron job so that letsencrypt will auto renew"
         systemctl restart nginx
