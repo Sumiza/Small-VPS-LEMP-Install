@@ -1,8 +1,7 @@
 # Small-VPS-LEMP-Install
-LEMP Installer for ipv6
+LEMP Installer
 
 CentOS 7 ONLY
-IPv6
 
 comes in two versions, default settings for any standard server and low ram settings for servers with low ram.
 
