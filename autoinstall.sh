@@ -68,6 +68,8 @@ if [ "$RSP1" = "1" ]; then
         yum install -y php-fpm
         yum install -y php-pecl-zip
         yum install -y logrotate
+        firewall-cmd --permanent --add-service=http
+        firewall-cmd --reload
         systemctl enable crond
         systemctl enable php-fpm
         systemctl enable mariadb
@@ -132,6 +134,8 @@ fi
 
 if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "3" ]; then
         if [ "$RSPLETSENCRYPT" = "y" ]; then
+        firewall-cmd --permanent --add-service=https
+        firewall-cmd --reload
         printf "A\n \n" | certbot certonly --nginx --register-unsafely-without-email
         (crontab -l | grep '/usr/bin/certbot renew') || (crontab -l ; echo "0 3 */10 * * /usr/bin/certbot renew >/dev/null 2>&1") | crontab
         echo "Adding cron job so that letsencrypt will auto renew"
