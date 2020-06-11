@@ -7,7 +7,7 @@ comes in two versions, default settings for any standard server and low ram sett
 
 bash <(wget -qO- https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/install.sh)
 
-This was just written for a 128mb server from https://hosting.gullo.me/ but would think should work on any small ipv6 server.
+This was just written for a 128mb server from https://hosting.gullo.me/ but would think should work on any small server.
 
 It has no safeguards built in, if you type something wrong it will just break, dont have to try.
 
