@@ -36,6 +36,8 @@ if [ "$RSP1" = "1" ]; then
         yum install -y php-fpm
         yum install -y php-pecl-zip
         yum install -y logrotate
+        firewall-cmd --permanent --add-service=http
+        firewall-cmd --reload
         systemctl enable crond
         systemctl enable php-fpm
         systemctl enable mariadb
@@ -117,6 +119,8 @@ if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "3" ]; then
         echo "Want to set up letsencrypt now? (y/n) only put y if you have your dns set up already or it will fail, this can be run at a later time." 
         read -r RSP
         if [ "$RSP" = "y" ]; then
+                firewall-cmd --permanent --add-service=https
+                firewall-cmd --reload
                 echo "Do you want to provide your email to letsencrypt (y/n)"
                 read -r RSP
                 if [ "$RSP" = "y" ]; then
