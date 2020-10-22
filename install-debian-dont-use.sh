@@ -12,7 +12,7 @@ if [ "$RSP1" = "1" ]; then
         echo "2. Default php-fmp and mariadb settings"
         read -r RSP2
         #---- yum can crash if these are all combined
-        apt update && upgrade -y
+        apt update && apt upgrade -y
         apt --reinstall -y install bsdutils
         echo exit 101 > /usr/sbin/policy-rc.d
         chmod +x /usr/sbin/policy-rc.d
