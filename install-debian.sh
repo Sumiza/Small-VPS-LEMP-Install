@@ -12,32 +12,25 @@ if [ "$RSP1" = "1" ]; then
         echo "2. Default php-fmp and mariadb settings"
         read -r RSP2
         #---- yum can crash if these are all combined
-        yum update -y
-        yum install -y epel-release
-        yum -y install https://rpms.remirepo.net/enterprise/remi-release-7.rpm
-        yum -y install yum-utils
-        yum-config-manager --enable remi-php74
-        yum update -y
-        yum install -y nginx
-        yum install -y htop
-        yum install -y cronie
-        yum install -y certbot
-        yum install -y python2-certbot-nginx
-        yum install -y mariadb-server
-        yum install -y php
-        yum install -y php-common
-        yum install -y php-mysql
-        yum install -y php-gd
-        yum install -y php-xml
-        yum install -y php-mbstring
-        yum install -y php-mcrypt
-        yum install -y php-xmlrpc
-        yum install -y unzip
-        yum install -y php-fpm
-        yum install -y php-pecl-zip
-        yum install -y logrotate
-        firewall-cmd --permanent --add-service=http
-        firewall-cmd --reload
+        apt update && upgrade -y
+        apt install -y nginx
+        apt install -y htop
+         install -y cronie
+        apt install -y certbot
+        apt install -y python2-certbot-nginx
+        apt install -y mariadb-server
+        apt install -y php
+        apt install -y php-common
+        apt install -y php-mysql
+        apt install -y php-gd
+        apt install -y php-xml
+        apt install -y php-mbstring
+        apt install -y php-mcrypt
+        apt install -y php-xmlrpc
+        apt install -y unzip
+        apt install -y php-fpm
+        apt install -y php-pecl-zip
+        apt install -y logrotate
         systemctl enable crond
         systemctl enable php-fpm
         systemctl enable mariadb
