@@ -13,12 +13,16 @@ if [ "$RSP1" = "1" ]; then
         read -r RSP2
         #---- yum can crash if these are all combined
         apt update && upgrade -y
+        apt --reinstall -y install bsdutils
+        echo exit 101 > /usr/sbin/policy-rc.d
+        chmod +x /usr/sbin/policy-rc.d
+        apt install -y apt-utils
+        apt install -y dialog
         apt install -y nginx
         apt install -y htop
-         install -y cronie
         apt install -y certbot
-        apt install -y python2-certbot-nginx
-        apt install -y mariadb-server
+        apt install -y python3-certbot-nginx
+        DEBIAN_FRONTEND=noninteractive apt install -y mariadb-server
         apt install -y php
         apt install -y php-common
         apt install -y php-mysql
@@ -31,6 +35,7 @@ if [ "$RSP1" = "1" ]; then
         apt install -y php-fpm
         apt install -y php-pecl-zip
         apt install -y logrotate
+        apt install -y ca-certificates
         systemctl enable crond
         systemctl enable php-fpm
         systemctl enable mariadb
