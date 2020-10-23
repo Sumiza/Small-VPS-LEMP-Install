@@ -1,0 +1,14 @@
+Mariadb install doesnt seem to install right, so work around is to run this first before the script
+
+When the install happens and frezzes, reboot the server and then run the install script
+
+apt-get --reinstall install -y bsdutils
+apt install -y dialog
+DEBIAN_FRONTEND=noninteractive apt install -y mariadb-server
+
+----
+reboot when it freezes
+-----
+
+After reboot run:
+dpkg --configure -a
