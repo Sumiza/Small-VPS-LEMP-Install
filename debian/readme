@@ -1,5 +1,5 @@
 
-bash <(wget -qO- https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/install.sh)
+bash <(wget -qO- https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/debian/install.sh)
 
 
 ----------------------------------------
