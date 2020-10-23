@@ -12,6 +12,7 @@ if [ "$RSP1" = "1" ]; then
         echo "2. Default php-fmp and mariadb settings"
         read -r RSP2
         #---- yum can crash if these are all combined
+        systemctl stop mariadb
         apt update && apt upgrade -y
         apt --reinstall -y install bsdutils
         echo exit 101 > /usr/sbin/policy-rc.d
@@ -38,7 +39,7 @@ if [ "$RSP1" = "1" ]; then
         apt install -y php-zip
         apt install -y logrotate
         apt install -y ca-certificates
-        systemctl enable crond
+        systemctl enable cron
         systemctl enable php-fpm
         systemctl enable mariadb
         systemctl enable nginx
@@ -52,7 +53,7 @@ if [ "$RSP1" = "1" ]; then
                 sed -i '/pm.process_idle_timeout = /c\pm.process_idle_timeout = 10s' /etc/php/7.3/fpm/pool.d/www.conf
                 sed -i '/pm.max_requests = /c\pm.max_requests = 0' /etc/php/7.3/fpm/pool.d/www.conf
                 rm /etc/my.cnf
-                wget https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/my.conf -O /etc/my.cnf
+                wget https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/debian/my.cnf -O /etc/mysql/my.cnf
                 fi
                 #------ Low memory settings
         
@@ -66,7 +67,7 @@ if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ]; then
         read -r DOMAINNAMEFQDN
         mkdir /usr/share/nginx/html/"$DOMAINNAMEFQDN"
         chmod 755 /usr/share/nginx/html/"$DOMAINNAMEFQDN"
-        chown -R nginx:nginx /usr/share/nginx/html/"$DOMAINNAMEFQDN"
+        chown -R www-data:www-data /usr/share/nginx/html/"$DOMAINNAMEFQDN"
         cp /usr/share/nginx/html/index.html /usr/share/nginx/html/"$DOMAINNAMEFQDN"/index.html
         wget https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/BlankNginx.conf -O /etc/nginx/conf.d/"$DOMAINNAMEFQDN".conf
         sed -i "s/WEBSITENAME/$DOMAINNAMEFQDN/g" /etc/nginx/conf.d/"$DOMAINNAMEFQDN".conf
@@ -81,7 +82,7 @@ if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ]; then
                 rm /usr/share/nginx/html/"$DOMAINNAMEFQDN"/latest.tar.gz
                 mv /usr/share/nginx/html/"$DOMAINNAMEFQDN"/wordpress/* /usr/share/nginx/html/"$DOMAINNAMEFQDN"/
                 rmdir /usr/share/nginx/html/"$DOMAINNAMEFQDN"/wordpress/
-                chown -R nginx:nginx /usr/share/nginx/html/"$DOMAINNAMEFQDN"/
+                chown -R www-data:www-data /usr/share/nginx/html/"$DOMAINNAMEFQDN"/
                 find /usr/share/nginx/html/"$DOMAINNAMEFQDN"/ -type d -exec chmod 775 {} \;
                 find /usr/share/nginx/html/"$DOMAINNAMEFQDN"/ -type f -exec chmod 664 {} \;
                 echo "----------------------------------------------"
@@ -114,8 +115,6 @@ if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ] || [ "$RSP1" = "3" ]; then
         echo "Want to set up letsencrypt now? (y/n) only put y if you have your dns set up already or it will fail, this can be run at a later time." 
         read -r RSP
         if [ "$RSP" = "y" ]; then
-                firewall-cmd --permanent --add-service=https
-                firewall-cmd --reload
                 echo "Do you want to provide your email to letsencrypt (y/n)"
                 read -r RSP
                 if [ "$RSP" = "y" ]; then
