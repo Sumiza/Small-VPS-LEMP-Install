@@ -4,6 +4,7 @@ When the install happens and frezzes, reboot the server and then run the install
 
 apt-get --reinstall install -y bsdutils
 apt install -y dialog
+apt install -y ca-certificates
 DEBIAN_FRONTEND=noninteractive apt install -y mariadb-server
 
 ----
@@ -11,4 +12,6 @@ reboot when it freezes
 -----
 
 After reboot run:
+
+wget https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/debian/my.cnf -O /etc/mysql/my.cnf
 dpkg --configure -a
