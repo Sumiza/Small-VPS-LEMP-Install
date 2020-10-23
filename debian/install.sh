@@ -29,7 +29,6 @@ if [ "$RSP1" = "1" ]; then
         apt install -y php-gd
         apt install -y php-xml
         apt install -y php-mbstring
-        apt install -y php-mcrypt
         apt install -y php-xmlrpc
         apt install -y unzip
         apt install -y php-fpm
