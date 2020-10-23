@@ -1,3 +1,11 @@
+
+bash <(wget -qO- https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/install.sh)
+
+
+----------------------------------------
+IF INSTALL FAILS AT MARIADB
+----------------------------------------
+
 Mariadb install doesnt seem to install right on the small vps so if your installer fails or hangs on installing mariadb run follow along here:
 
 
