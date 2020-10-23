@@ -14,18 +14,15 @@ if [ "$RSP1" = "1" ]; then
         #---- yum can crash if these are all combined
         systemctl stop mariadb
         apt update && apt upgrade -y
-        apt --reinstall -y install bsdutils
-        echo exit 101 > /usr/sbin/policy-rc.d
-        chmod +x /usr/sbin/policy-rc.d
-        apt-get --reinstall install bsdutils
+        apt-get --reinstall install -y bsdutils
+        apt install -y dialog
+        apt install -y ca-certificates
         apt install -y cron
         apt remove -y exim4*
-        apt install -y dialog
         apt install -y nginx
         apt install -y htop
         apt install -y certbot
         apt install -y python3-certbot-nginx
-        apt install -y mariadb-server
         apt install -y php-common
         apt install -y php-curl
         apt install -y php-mysql
@@ -39,6 +36,7 @@ if [ "$RSP1" = "1" ]; then
         apt install -y php-zip
         apt install -y logrotate
         apt install -y ca-certificates
+        apt install -y mariadb-server
         systemctl enable cron
         systemctl enable php-fpm
         systemctl enable mariadb
