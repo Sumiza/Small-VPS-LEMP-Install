@@ -19,6 +19,7 @@ if [ "$RSP1" = "1" ]; then
         apt install -y ca-certificates
         apt install -y cron
         apt remove -y exim4*
+        apt autoremove
         apt install -y nginx
         apt install -y htop
         apt install -y certbot
