@@ -1,4 +1,5 @@
-Mariadb install doesnt seem to install right, so work around is to run this first before the script
+Mariadb install doesnt seem to install right on the small vps so if your installer fails or hangs on installing mariadb run follow along here:
+
 
 When the install happens and frezzes, reboot the server and then run the install script
 
@@ -15,3 +16,5 @@ After reboot run:
 
 wget https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/debian/my.cnf -O /etc/mysql/my.cnf
 dpkg --configure -a
+
+now should be able to run the install script without it crashing
