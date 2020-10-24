@@ -50,7 +50,7 @@ if [ "$RSP1" = "1" ]; then
                 sed -i '/pm.max_children = /c\pm.max_children = 1' /etc/php/7.3/fpm/pool.d/www.conf
                 sed -i '/pm.process_idle_timeout = /c\pm.process_idle_timeout = 10s' /etc/php/7.3/fpm/pool.d/www.conf
                 sed -i '/pm.max_requests = /c\pm.max_requests = 0' /etc/php/7.3/fpm/pool.d/www.conf
-                rm /etc/my.cnf
+                rm /etc/mysql/my.cnf
                 wget https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/debian/my.cnf -O /etc/mysql/my.cnf
                 fi
                 #------ Low memory settings
@@ -63,10 +63,9 @@ fi
 if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ]; then
         echo "What is the fully qualified domain name (mytestdomain.com) dont put the www.:"
         read -r DOMAINNAMEFQDN
-        mkdir /usr/share/nginx/html/"$DOMAINNAMEFQDN"
-        chmod 755 /usr/share/nginx/html/"$DOMAINNAMEFQDN"
+        mkdir /var/www/"$DOMAINNAMEFQDN"
+        chmod 755 /var/www/"$DOMAINNAMEFQDN"
         chown -R www-data:www-data /usr/share/nginx/html/"$DOMAINNAMEFQDN"
-        cp /usr/share/nginx/html/index.html /usr/share/nginx/html/"$DOMAINNAMEFQDN"/index.html
         wget https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/debian/BlankNginx.conf -O /etc/nginx/conf.d/"$DOMAINNAMEFQDN".conf
         sed -i "s/WEBSITENAME/$DOMAINNAMEFQDN/g" /etc/nginx/conf.d/"$DOMAINNAMEFQDN".conf
         systemctl restart nginx
@@ -75,14 +74,14 @@ if [ "$RSP1" = "1" ] || [ "$RSP1" = "2" ]; then
         echo "Do you want wordpress installed (y/n)?"
         read -r RSP
         if [ "$RSP" = "y" ]; then
-                wget http://wordpress.org/latest.tar.gz -O /usr/share/nginx/html/"$DOMAINNAMEFQDN"/latest.tar.gz
-                tar -xzvf /usr/share/nginx/html/"$DOMAINNAMEFQDN"/latest.tar.gz -C /usr/share/nginx/html/"$DOMAINNAMEFQDN"/
-                rm /usr/share/nginx/html/"$DOMAINNAMEFQDN"/latest.tar.gz
-                mv /usr/share/nginx/html/"$DOMAINNAMEFQDN"/wordpress/* /usr/share/nginx/html/"$DOMAINNAMEFQDN"/
-                rmdir /usr/share/nginx/html/"$DOMAINNAMEFQDN"/wordpress/
+                wget http://wordpress.org/latest.tar.gz -O /var/www/"$DOMAINNAMEFQDN"/latest.tar.gz
+                tar -xzvf /var/www/"$DOMAINNAMEFQDN"/latest.tar.gz -C /usr/share/nginx/html/"$DOMAINNAMEFQDN"/
+                rm /var/www/"$DOMAINNAMEFQDN"/latest.tar.gz
+                mv /var/www/"$DOMAINNAMEFQDN"/wordpress/* /var/www/"$DOMAINNAMEFQDN"/
+                rmdir /var/www/"$DOMAINNAMEFQDN"/wordpress/
                 chown -R www-data:www-data /usr/share/nginx/html/"$DOMAINNAMEFQDN"/
-                find /usr/share/nginx/html/"$DOMAINNAMEFQDN"/ -type d -exec chmod 775 {} \;
-                find /usr/share/nginx/html/"$DOMAINNAMEFQDN"/ -type f -exec chmod 664 {} \;
+                find /var/www/"$DOMAINNAMEFQDN"/ -type d -exec chmod 775 {} \;
+                find /var/www/"$DOMAINNAMEFQDN"/ -type f -exec chmod 664 {} \;
                 echo "----------------------------------------------"
                 echo "If all went well wordpress has been installed with standard premissions"
         fi
