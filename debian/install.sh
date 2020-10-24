@@ -18,7 +18,6 @@ if [ "$RSP1" = "1" ]; then
         apt install -y dialog
         apt install -y ca-certificates
         apt install -y cron
-        apt remove -y exim4*
         apt install -y nginx
         apt install -y htop
         apt install -y certbot
@@ -34,11 +33,11 @@ if [ "$RSP1" = "1" ]; then
         apt install -y php-fpm
         apt install -y php-zip
         apt install -y logrotate
+        systemctl stop php7.3-fpm
+        systemctl stop nginx
+        systemctl stop cron
+        apt remove -y exim4*
         apt autoremove -y
-        systemctl enable cron
-        systemctl enable php-fpm
-        systemctl enable mariadb
-        systemctl enable nginx
         rm /etc/nginx/nginx.conf
         wget https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/debian/nginx.conf -O /etc/nginx/nginx.conf
         #------Standard install
