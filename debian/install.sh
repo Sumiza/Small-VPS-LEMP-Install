@@ -35,7 +35,6 @@ if [ "$RSP1" = "1" ]; then
         apt install -y php-fpm
         apt install -y php-zip
         apt install -y logrotate
-        apt install -y mariadb-server
         systemctl enable cron
         systemctl enable php-fpm
         systemctl enable mariadb
@@ -49,12 +48,11 @@ if [ "$RSP1" = "1" ]; then
                 sed -i '/pm.max_children = /c\pm.max_children = 1' /etc/php/7.3/fpm/pool.d/www.conf
                 sed -i '/pm.process_idle_timeout = /c\pm.process_idle_timeout = 10s' /etc/php/7.3/fpm/pool.d/www.conf
                 sed -i '/pm.max_requests = /c\pm.max_requests = 0' /etc/php/7.3/fpm/pool.d/www.conf
-                rm /etc/mysql/my.cnf
+                mkdir /etc/mysql/
                 wget https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install/master/debian/my.cnf -O /etc/mysql/my.cnf
                 fi
                 #------ Low memory settings
-        
-        systemctl restart mariadb
+        apt install -y mariadb-server
         /usr/bin/mysql_secure_installation
 fi
 #----- Initial install done -----------
