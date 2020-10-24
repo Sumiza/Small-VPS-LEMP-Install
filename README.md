@@ -1,7 +1,7 @@
 # Small-VPS-LEMP-Install
 LEMP Installer
 
-CentOS 7 ONLY
+CentOS 7 ONLY, there is a debian 10 now too look in folder
 
 comes in two versions, default settings for any standard server and low ram settings for servers with low ram.
 
