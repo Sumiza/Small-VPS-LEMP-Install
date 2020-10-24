@@ -35,7 +35,6 @@ if [ "$RSP1" = "1" ]; then
         apt install -y php-fpm
         apt install -y php-zip
         apt install -y logrotate
-        apt install -y ca-certificates
         apt install -y mariadb-server
         systemctl enable cron
         systemctl enable php-fpm
