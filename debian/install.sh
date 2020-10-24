@@ -19,7 +19,6 @@ if [ "$RSP1" = "1" ]; then
         apt install -y ca-certificates
         apt install -y cron
         apt remove -y exim4*
-        apt autoremove
         apt install -y nginx
         apt install -y htop
         apt install -y certbot
@@ -35,6 +34,7 @@ if [ "$RSP1" = "1" ]; then
         apt install -y php-fpm
         apt install -y php-zip
         apt install -y logrotate
+        apt autoremove -y
         systemctl enable cron
         systemctl enable php-fpm
         systemctl enable mariadb
