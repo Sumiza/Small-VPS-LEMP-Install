@@ -6,10 +6,7 @@ bash <(wget -qO- https://raw.githubusercontent.com/Sumiza/Small-VPS-LEMP-Install
 IF INSTALL FAILS AT MARIADB
 ----------------------------------------
 
-Mariadb install doesnt seem to install right on the small vps so if your installer fails or hangs on installing mariadb run follow along here:
-
-
-When the install happens and frezzes, reboot the server and then run the install script
+Mariadb install doesnt seem to install right on the small vps so if your installer fails or hangs on installing mariadb follow along here before running the installer script:
 
 apt-get --reinstall install -y bsdutils
 apt install -y dialog
