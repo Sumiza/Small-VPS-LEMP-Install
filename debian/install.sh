@@ -52,6 +52,8 @@ if [ "$RSP1" = "1" ]; then
                 fi
                 #------ Low memory settings
         apt install -y mariadb-server
+        mysql_install_db
+        systemctl restart mariadb
         /usr/bin/mysql_secure_installation
 fi
 #----- Initial install done -----------
